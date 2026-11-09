@@ -4,7 +4,6 @@ import com.bank.loan_management.dto.CustomerRequest;
 import com.bank.loan_management.dto.CustomerResponse;
 import com.bank.loan_management.service.CustomerService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
 
 
-    @Autowired
-    CustomerService customerService;
+    private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService){
+        this.customerService=customerService;
+    }
 
 
     @PostMapping

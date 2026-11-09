@@ -26,9 +26,8 @@ public class CustomerServiceImpl implements CustomerService{
     public CustomerResponse customerRegistration(CustomerRequest customerRequest) {
         Customer newCustomer = mapper.mapDTOtoEntity(customerRequest);
 
-        customerRepository.save(newCustomer);
+        Customer savedCustomer = customerRepository.save(newCustomer);
 
-
-        return mapper.mapEntityToDTO(newCustomer);
+        return mapper.mapEntityToDTO(savedCustomer);
     }
 }
