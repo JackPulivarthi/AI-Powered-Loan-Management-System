@@ -3,9 +3,9 @@ package com.bank.loan_management.service;
 import com.bank.loan_management.dto.CustomerRequest;
 import com.bank.loan_management.dto.CustomerResponse;
 import com.bank.loan_management.entity.Customer;
+import com.bank.loan_management.exception.EmailAlreadyExistsException;
 import com.bank.loan_management.mapper.Mapper;
 import com.bank.loan_management.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,7 +27,8 @@ public class CustomerServiceImpl implements CustomerService{
         Customer newCustomer = mapper.mapDTOtoEntity(customerRequest);
 
         if(existsByCustomerEmailAddress(customerRequest.customerEmailAddress))
-            throw new RuntimeException("Email already registered");
+       //     throw new RuntimeException("Email already registered");
+            throw new EmailAlreadyExistsException("Email already registered");
 
         Customer savedCustomer = customerRepository.save(newCustomer);
 
@@ -35,6 +36,6 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     boolean existsByCustomerEmailAddress(String email){
-        return customerRepository.existsByCustomerEmailAddress(email);
+        return customerRepository.existsByCustomerEmailAddressEqualsIgnoreCase(email);
     }
 }
