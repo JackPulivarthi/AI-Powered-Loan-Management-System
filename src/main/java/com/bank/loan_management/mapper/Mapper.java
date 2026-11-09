@@ -1,6 +1,7 @@
 package com.bank.loan_management.mapper;
 
 import com.bank.loan_management.dto.CustomerRequest;
+import com.bank.loan_management.dto.CustomerResponse;
 import com.bank.loan_management.entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,11 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Mapper {
 
-
-    @Autowired
-    Customer customer;
-
     public Customer mapDTOtoEntity(CustomerRequest customerRequest){
+        Customer customer = new Customer();
+
         customer.setCustomerFullName(customerRequest.customerFullName);
         customer.setCustomerEmailAddress(customerRequest.customerEmailAddress);
         customer.setCustomerDateOfBirth(customerRequest.customerDateOfBirth);
@@ -21,13 +20,15 @@ public class Mapper {
         return customer;
     }
 
-//    public Customer mapEntityToDTO(Customer customer){
-//
-//        customerRequest.customerFullName=customer.getCustomerFullName();
-//        customerRequest.customerEmailAddress=customer.getCustomerEmailAddress();
-//        customerRequest.customerDateOfBirth=customer.getCustomerDateOfBirth();
-//        customerRequest.customerMobileNumber=customer.getCustomerMobileNumber();
-//
-//        return customerRequest;
-//    }
+    public CustomerResponse mapEntityToDTO(Customer customer){
+        CustomerResponse customerResponse = new CustomerResponse();
+
+        customerResponse.customerId=customer.getCustomerId();
+        customerResponse.customerFullName=customer.getCustomerFullName();
+        customerResponse.customerEmailAddress=customer.getCustomerEmailAddress();
+        customerResponse.customerDateOfBirth=customer.getCustomerDateOfBirth();
+        customerResponse.customerMobileNumber=customer.getCustomerMobileNumber();
+
+        return customerResponse;
+    }
 }

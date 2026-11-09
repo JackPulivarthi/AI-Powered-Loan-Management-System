@@ -1,7 +1,8 @@
 package com.bank.loan_management.service;
 
 import com.bank.loan_management.dto.CustomerRequest;
+import com.bank.loan_management.dto.CustomerResponse;
 
 public interface CustomerService {
-    CustomerRequest customerRegistration(CustomerRequest customerRequest);
+    CustomerResponse customerRegistration(CustomerRequest customerRequest);
 }

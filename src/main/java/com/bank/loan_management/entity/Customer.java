@@ -4,10 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +16,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 @Entity
-@Component
 public class Customer {
 
     @Id
@@ -30,12 +26,13 @@ public class Customer {
     @NotBlank(message = "Full name cannot be blank")
     private String customerFullName;
 
-    @NotBlank(message = "Email address cannot be blank")
+    @Email
     @Column(name = "Customer_Email_Address",unique = true)
     private String customerEmailAddress;
 
     @Pattern(regexp = "^[0-9]{10}$", message = "Please enter a valid mobile number")
     @Column(name = "Customer_Mobile_Number")
+    @NotBlank(message = "Mobile number cannot be blank")
     private String customerMobileNumber;
 
     @NotNull(message = "Date of birth is required")

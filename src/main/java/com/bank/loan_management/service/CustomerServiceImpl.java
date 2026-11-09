@@ -1,6 +1,7 @@
 package com.bank.loan_management.service;
 
 import com.bank.loan_management.dto.CustomerRequest;
+import com.bank.loan_management.dto.CustomerResponse;
 import com.bank.loan_management.entity.Customer;
 import com.bank.loan_management.mapper.Mapper;
 import com.bank.loan_management.repository.CustomerRepository;
@@ -22,11 +23,12 @@ public class CustomerServiceImpl implements CustomerService{
 
 
     @Override
-    public CustomerRequest customerRegistration(CustomerRequest customerRequest) {
+    public CustomerResponse customerRegistration(CustomerRequest customerRequest) {
         Customer newCustomer = mapper.mapDTOtoEntity(customerRequest);
 
         customerRepository.save(newCustomer);
 
-        return customerRequest;
+
+        return mapper.mapEntityToDTO(newCustomer);
     }
 }
