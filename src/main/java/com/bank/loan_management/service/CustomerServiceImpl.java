@@ -1,0 +1,32 @@
+package com.bank.loan_management.service;
+
+import com.bank.loan_management.dto.CustomerRequest;
+import com.bank.loan_management.entity.Customer;
+import com.bank.loan_management.mapper.Mapper;
+import com.bank.loan_management.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CustomerServiceImpl implements CustomerService{
+
+
+
+    private final Mapper mapper;
+    private final CustomerRepository customerRepository;
+
+    public CustomerServiceImpl(Mapper mapper, CustomerRepository customerRepository){
+        this.mapper = mapper;
+        this.customerRepository = customerRepository;
+    }
+
+
+    @Override
+    public CustomerRequest customerRegistration(CustomerRequest customerRequest) {
+        Customer newCustomer = mapper.mapDTOtoEntity(customerRequest);
+
+        customerRepository.save(newCustomer);
+
+        return customerRequest;
+    }
+}
