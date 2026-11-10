@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,4 +37,7 @@ public class Customer {
     @Past(message = "Date of birth should be past")
     @Column(name = "Customer_Date_Of_Birth")
     private LocalDate customerDateOfBirth;
+
+    @OneToMany(mappedBy = "applicationId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LoanApplication> loanApplication;
 }

@@ -2,7 +2,9 @@ package com.bank.loan_management.mapper;
 
 import com.bank.loan_management.dto.CustomerRequest;
 import com.bank.loan_management.dto.CustomerResponse;
+import com.bank.loan_management.dto.LoanApplicationResponse;
 import com.bank.loan_management.entity.Customer;
+import com.bank.loan_management.entity.LoanApplication;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,5 +31,19 @@ public class Mapper {
         customerResponse.setCustomerMobileNumber(customer.getCustomerMobileNumber());
 
         return customerResponse;
+    }
+
+    public LoanApplicationResponse mapLoanEntitytoDto(LoanApplication loanApplication){
+        LoanApplicationResponse loanApplicationResponse = new LoanApplicationResponse();
+
+        loanApplicationResponse.setApplicationId(loanApplication.getApplicationId());
+        loanApplicationResponse.setCustomerId(loanApplication.getApplicationId());
+        loanApplicationResponse.setEmi(loanApplication.getEmi());
+        loanApplicationResponse.setLoanAmount(loanApplication.getLoanAmount());
+        loanApplicationResponse.setMonthlyIncome(loanApplication.getMonthlyIncome());
+        loanApplicationResponse.setLoanTenure(loanApplication.getLoanTenure());
+        loanApplicationResponse.setStatus(loanApplication.getStatus());
+
+        return loanApplicationResponse;
     }
 }
