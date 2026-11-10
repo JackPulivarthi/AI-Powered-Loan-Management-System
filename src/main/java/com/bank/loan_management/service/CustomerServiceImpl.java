@@ -24,18 +24,14 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public CustomerResponse customerRegistration(CustomerRequest customerRequest) {
-        Customer newCustomer = mapper.mapDTOtoEntity(customerRequest);
 
-        if(existsByCustomerEmailAddress(customerRequest.customerEmailAddress))
-       //     throw new RuntimeException("Email already registered");
+        if(customerRepository.existsByCustomerEmailAddressEqualsIgnoreCase(customerRequest.getCustomerEmailAddress()))
             throw new EmailAlreadyExistsException("Email already registered");
+
+        Customer newCustomer = mapper.mapDTOtoEntity(customerRequest);
 
         Customer savedCustomer = customerRepository.save(newCustomer);
 
         return mapper.mapEntityToDTO(savedCustomer);
-    }
-
-    boolean existsByCustomerEmailAddress(String email){
-        return customerRepository.existsByCustomerEmailAddressEqualsIgnoreCase(email);
     }
 }

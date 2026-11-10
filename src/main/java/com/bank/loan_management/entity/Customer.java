@@ -1,9 +1,6 @@
 package com.bank.loan_management.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +16,7 @@ import java.time.LocalDate;
 public class Customer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer customerId;
 
     @Column(name = "Customer_Full_Name")
@@ -27,7 +24,7 @@ public class Customer {
     private String customerFullName;
 
     @Email
-    @Column(name = "Customer_Email_Address",unique = true)
+    @Column(name = "Customer_Email_Address",unique = true, nullable = false)
     private String customerEmailAddress;
 
     @Pattern(regexp = "^[0-9]{10}$", message = "Please enter a valid mobile number")

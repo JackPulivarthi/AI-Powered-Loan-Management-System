@@ -1,11 +1,14 @@
 package com.bank.loan_management.dto;
 
+import lombok.Data;
+
 import java.time.LocalDate;
 
+@Data
 public class CustomerResponse {
-    public Integer customerId;
-    public String customerFullName;
-    public String customerEmailAddress;
-    public String customerMobileNumber;
-    public LocalDate customerDateOfBirth;
+    private Integer customerId;
+    private String customerFullName;
+    private String customerEmailAddress;
+    private String customerMobileNumber;
+    private LocalDate customerDateOfBirth;
 }
