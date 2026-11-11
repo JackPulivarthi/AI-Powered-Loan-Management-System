@@ -2,12 +2,7 @@ package com.bank.loan_management.entity;
 
 import com.bank.loan_management.enums.LoanStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-import java.time.LocalDate;
+import lombok.*;
 
 @Entity
 @AllArgsConstructor
@@ -30,6 +25,7 @@ public class LoanApplication {
     private Integer applicationId;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;

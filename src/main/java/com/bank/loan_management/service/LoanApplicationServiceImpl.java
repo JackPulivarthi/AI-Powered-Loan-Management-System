@@ -22,7 +22,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     private final CustomerRepository customerRepository;
 
 
-    LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository){
+    public LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository){
         this.loanApplicationRepository=loanApplicationRepository;
         this.mapper = mapper;
         this.customerRepository = customerRepository;

@@ -2,10 +2,7 @@ package com.bank.loan_management.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -39,6 +36,7 @@ public class Customer {
     private LocalDate customerDateOfBirth;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "customer")
     private List<LoanApplication> loanApplications;
 }
