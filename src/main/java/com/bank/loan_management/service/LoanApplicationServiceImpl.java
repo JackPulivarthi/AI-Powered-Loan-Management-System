@@ -2,9 +2,12 @@ package com.bank.loan_management.service;
 
 import com.bank.loan_management.dto.LoanApplicationRequest;
 import com.bank.loan_management.dto.LoanApplicationResponse;
+import com.bank.loan_management.entity.Customer;
 import com.bank.loan_management.entity.LoanApplication;
 import com.bank.loan_management.mapper.Mapper;
+import com.bank.loan_management.repository.CustomerRepository;
 import com.bank.loan_management.repository.LoanApplicationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,17 +18,22 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
 
     private final LoanApplicationRepository loanApplicationRepository;
     private final Mapper mapper;
+    private final CustomerRepository customerRepository;
 
 
-    LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, LoanApplication loanApplication, Mapper mapper){
+    LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository){
         this.loanApplicationRepository=loanApplicationRepository;
         this.mapper = mapper;
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public LoanApplicationResponse loanApplication(LoanApplicationRequest loanApplicationRequest) {
 
         LoanApplication loanApplication = new LoanApplication();
+
+        Customer customer = customerRepository.findById(loanApplicationRequest.getCustomerId()).orElseThrow(()-> new EntityNotFoundException("Customer not found"));
+        loanApplication.setCustomer(customer);
         loanApplication.getCustomer().setCustomerId(loanApplicationRequest.getCustomerId());
         loanApplication.setLoanAmount(loanApplicationRequest.getLoanAmount());
         loanApplication.setLoanTenure(loanApplicationRequest.getLoanTenure());
