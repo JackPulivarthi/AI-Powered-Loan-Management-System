@@ -38,6 +38,6 @@ public class Customer {
     @Column(name = "Customer_Date_Of_Birth")
     private LocalDate customerDateOfBirth;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "customer")
     private List<LoanApplication> loanApplication;
 }

@@ -1,5 +1,6 @@
 package com.bank.loan_management.entity;
 
+import com.bank.loan_management.enums.LoanStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,8 +44,9 @@ public class LoanApplication {
     @Column(name = "emi")
     private double emi;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private LoanStatus status;
 
 
 

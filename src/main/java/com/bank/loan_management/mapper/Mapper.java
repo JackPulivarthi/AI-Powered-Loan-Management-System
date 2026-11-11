@@ -42,7 +42,7 @@ public class Mapper {
         loanApplicationResponse.setLoanAmount(loanApplication.getLoanAmount());
         loanApplicationResponse.setMonthlyIncome(loanApplication.getMonthlyIncome());
         loanApplicationResponse.setLoanTenure(loanApplication.getLoanTenure());
-        loanApplicationResponse.setStatus(loanApplication.getStatus());
+        loanApplicationResponse.setStatus(loanApplication.getStatus().name());
 
         return loanApplicationResponse;
     }

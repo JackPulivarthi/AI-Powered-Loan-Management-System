@@ -43,7 +43,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         double emi =calculateEmi(loanApplicationRequest.getLoanAmount(),loanApplicationRequest.getLoanTenure(),12.0);
         loanApplication.setEmi(emi);
 
-        loanApplication.setStatus(String.valueOf(LoanStatus.PENDING));
+        loanApplication.setStatus(LoanStatus.PENDING);
 
         return mapper.mapLoanEntitytoDto(loanApplicationRepository.save(loanApplication));
     }
