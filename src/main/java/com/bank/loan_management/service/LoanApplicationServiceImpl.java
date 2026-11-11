@@ -2,6 +2,7 @@ package com.bank.loan_management.service;
 
 import com.bank.loan_management.dto.LoanApplicationRequest;
 import com.bank.loan_management.dto.LoanApplicationResponse;
+import com.bank.loan_management.dto.StatusUpdate;
 import com.bank.loan_management.entity.Customer;
 import com.bank.loan_management.entity.LoanApplication;
 import com.bank.loan_management.enums.LoanStatus;
@@ -59,6 +60,17 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     public List<LoanApplicationResponse> getAllLoanApplications() {
         List<LoanApplication> loanApplications= loanApplicationRepository.findAll();
         return mapper.mapLoanEntitiestoDTO(loanApplications);
+    }
+
+    @Override
+    public LoanApplicationResponse statusUpdate(StatusUpdate statusUpdate, Integer applicationId) {
+        LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
+
+        loanApplication.setStatus(LoanStatus.valueOf(statusUpdate.getStatus()));
+
+        loanApplicationRepository.save(loanApplication);
+
+        return mapper.mapLoanEntitytoDto(loanApplication);
     }
 
 

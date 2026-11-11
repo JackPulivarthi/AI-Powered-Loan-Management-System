@@ -2,6 +2,8 @@ package com.bank.loan_management.controller;
 
 import com.bank.loan_management.dto.LoanApplicationRequest;
 import com.bank.loan_management.dto.LoanApplicationResponse;
+import com.bank.loan_management.dto.StatusUpdate;
+import com.bank.loan_management.enums.LoanStatus;
 import com.bank.loan_management.service.LoanApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -36,6 +38,12 @@ public class LoanApplicationController {
     public ResponseEntity<List<LoanApplicationResponse>> getAllLoanApplications(){
         List<LoanApplicationResponse> loanApplicationResponses = loanApplicationService.getAllLoanApplications();
         return ResponseEntity.ok(loanApplicationResponses);
+    }
+
+    @PutMapping("{applicationId}/status")
+    public ResponseEntity<LoanApplicationResponse> statusUpdate(@RequestBody @Valid StatusUpdate statusUpdate,@PathVariable("applicationId") Integer applicationId){
+        LoanApplicationResponse loanApplicationResponse = loanApplicationService.statusUpdate(statusUpdate,applicationId);
+        return ResponseEntity.ok(loanApplicationResponse);
     }
 
 }
