@@ -1,6 +1,7 @@
 package com.bank.loan_management;
 
 import com.bank.loan_management.exception.EmailAlreadyExistsException;
+import com.bank.loan_management.exception.InvalidLoanStatusException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,8 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String,Object>> illegalArgumentException(IllegalArgumentException ex){
+    @ExceptionHandler(InvalidLoanStatusException.class)
+    public ResponseEntity<Map<String,Object>> invalidLoanStatusException (InvalidLoanStatusException  ex){
         Map<String, Object> map = new HashMap<>();
         map.put("timestamp", LocalDateTime.now());
         map.put("status", HttpStatus.CONFLICT.value());

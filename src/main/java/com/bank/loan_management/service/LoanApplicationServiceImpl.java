@@ -6,6 +6,7 @@ import com.bank.loan_management.dto.StatusUpdate;
 import com.bank.loan_management.entity.Customer;
 import com.bank.loan_management.entity.LoanApplication;
 import com.bank.loan_management.enums.LoanStatus;
+import com.bank.loan_management.exception.InvalidLoanStatusException;
 import com.bank.loan_management.mapper.Mapper;
 import com.bank.loan_management.repository.CustomerRepository;
 import com.bank.loan_management.repository.LoanApplicationRepository;
@@ -67,7 +68,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
 
         if(loanApplication.getStatus()!=LoanStatus.PENDING)
-            throw  new IllegalArgumentException("Loan already finalised");
+            throw  new InvalidLoanStatusException("Loan already finalised");
         loanApplication.setStatus(LoanStatus.valueOf(statusUpdate.getStatus()));
 
         LoanApplication updatedLoanApplication =loanApplicationRepository.save(loanApplication);

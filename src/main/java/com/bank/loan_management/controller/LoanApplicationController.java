@@ -40,7 +40,7 @@ public class LoanApplicationController {
         return ResponseEntity.ok(loanApplicationResponses);
     }
 
-    @PutMapping("{applicationId}/status")
+    @PutMapping("/{applicationId}/status")
     public ResponseEntity<LoanApplicationResponse> statusUpdate(@RequestBody @Valid StatusUpdate statusUpdate,@PathVariable("applicationId") Integer applicationId){
         LoanApplicationResponse loanApplicationResponse = loanApplicationService.statusUpdate(statusUpdate,applicationId);
         return ResponseEntity.ok(loanApplicationResponse);
