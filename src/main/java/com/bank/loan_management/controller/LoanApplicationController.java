@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/loan-applications")
 public class LoanApplicationController {
@@ -28,6 +30,12 @@ public class LoanApplicationController {
     public  ResponseEntity<LoanApplicationResponse> findApplicationById(@PathVariable("applicationId") Integer applicationId){
         LoanApplicationResponse loanApplicationResponse = loanApplicationService.findApplicationById(applicationId);
         return ResponseEntity.ok(loanApplicationResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LoanApplicationResponse>> getAllLoanApplications(){
+        List<LoanApplicationResponse> loanApplicationResponses = loanApplicationService.getAllLoanApplications();
+        return ResponseEntity.ok(loanApplicationResponses);
     }
 
 }

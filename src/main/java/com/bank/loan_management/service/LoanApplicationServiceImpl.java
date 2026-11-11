@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @Service
 public class LoanApplicationServiceImpl implements LoanApplicationService{
@@ -52,6 +53,12 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     public LoanApplicationResponse findApplicationById(Integer applicationId) {
         LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
         return mapper.mapLoanEntitytoDto(loanApplication);
+    }
+
+    @Override
+    public List<LoanApplicationResponse> getAllLoanApplications() {
+        List<LoanApplication> loanApplications= loanApplicationRepository.findAll();
+        return mapper.mapLoanEntitiestoDTO(loanApplications);
     }
 
 
