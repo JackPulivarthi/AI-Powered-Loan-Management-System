@@ -37,7 +37,7 @@ public class Mapper {
         LoanApplicationResponse loanApplicationResponse = new LoanApplicationResponse();
 
         loanApplicationResponse.setApplicationId(loanApplication.getApplicationId());
-        loanApplicationResponse.setCustomerId(loanApplication.getApplicationId());
+        loanApplicationResponse.setCustomerId(loanApplication.getCustomer().getCustomerId());
         loanApplicationResponse.setEmi(loanApplication.getEmi());
         loanApplicationResponse.setLoanAmount(loanApplication.getLoanAmount());
         loanApplicationResponse.setMonthlyIncome(loanApplication.getMonthlyIncome());

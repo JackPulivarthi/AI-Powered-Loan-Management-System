@@ -4,6 +4,7 @@ import com.bank.loan_management.dto.LoanApplicationRequest;
 import com.bank.loan_management.dto.LoanApplicationResponse;
 import com.bank.loan_management.entity.Customer;
 import com.bank.loan_management.entity.LoanApplication;
+import com.bank.loan_management.enums.LoanStatus;
 import com.bank.loan_management.mapper.Mapper;
 import com.bank.loan_management.repository.CustomerRepository;
 import com.bank.loan_management.repository.LoanApplicationRepository;
@@ -34,7 +35,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
 
         Customer customer = customerRepository.findById(loanApplicationRequest.getCustomerId()).orElseThrow(()-> new EntityNotFoundException("Customer not found"));
         loanApplication.setCustomer(customer);
-        loanApplication.getCustomer().setCustomerId(loanApplicationRequest.getCustomerId());
+
         loanApplication.setLoanAmount(loanApplicationRequest.getLoanAmount());
         loanApplication.setLoanTenure(loanApplicationRequest.getLoanTenure());
         loanApplication.setMonthlyIncome(loanApplicationRequest.getMonthlyIncome());
@@ -42,7 +43,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         double emi =calculateEmi(loanApplicationRequest.getLoanAmount(),loanApplicationRequest.getLoanTenure(),12.0);
         loanApplication.setEmi(emi);
 
-        loanApplication.setStatus("Pending");
+        loanApplication.setStatus(String.valueOf(LoanStatus.PENDING));
 
         return mapper.mapLoanEntitytoDto(loanApplicationRepository.save(loanApplication));
     }

@@ -37,7 +37,7 @@ public class LoanApplication {
     @Column(name = "loan_tenure")
     private Integer loanTenure;
 
-    @Column(name = "monthly+income")
+    @Column(name = "monthly_income")
     private Long monthlyIncome;
 
     @Column(name = "emi")
