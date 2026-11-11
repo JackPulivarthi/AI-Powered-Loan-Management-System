@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,6 +38,7 @@ public class Customer {
     @Column(name = "Customer_Date_Of_Birth")
     private LocalDate customerDateOfBirth;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "customer")
-    private List<LoanApplication> loanApplication;
+    private List<LoanApplication> loanApplications;
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -28,6 +29,7 @@ public class LoanApplication {
     @Column(name = "application_Id")
     private Integer applicationId;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;

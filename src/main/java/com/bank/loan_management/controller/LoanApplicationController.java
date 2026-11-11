@@ -17,7 +17,7 @@ public class LoanApplicationController {
 
     private final LoanApplicationService loanApplicationService;
 
-    LoanApplicationController(LoanApplicationService loanApplicationService){
+    public LoanApplicationController(LoanApplicationService loanApplicationService){
         this.loanApplicationService = loanApplicationService;
     }
 
