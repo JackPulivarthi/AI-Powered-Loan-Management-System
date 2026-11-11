@@ -27,7 +27,7 @@ public class LoanApplicationController {
     @GetMapping("/{applicationId}")
     public  ResponseEntity<LoanApplicationResponse> findApplicationById(@PathVariable("applicationId") Integer applicationId){
         LoanApplicationResponse loanApplicationResponse = loanApplicationService.findApplicationById(applicationId);
-        return ResponseEntity.status(HttpStatus.FOUND).body(loanApplicationResponse);
+        return ResponseEntity.ok(loanApplicationResponse);
     }
 
 }
