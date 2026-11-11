@@ -17,6 +17,7 @@ public class LoanApplicationRequest {
 //    }
 
     @NotNull
+    @Positive
     private Integer customerId;
 
     @NotNull

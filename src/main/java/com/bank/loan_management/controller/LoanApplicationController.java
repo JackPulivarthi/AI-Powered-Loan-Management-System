@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/loan-applications")
 public class LoanApplicationController {
 
-    LoanApplicationService loanApplicationService;
+    private final LoanApplicationService loanApplicationService;
 
     LoanApplicationController(LoanApplicationService loanApplicationService){
         this.loanApplicationService = loanApplicationService;
