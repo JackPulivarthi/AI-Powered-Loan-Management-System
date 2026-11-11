@@ -35,4 +35,16 @@ public class CustomExceptionHandler {
         body.put("message", ex.getLocalizedMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String,Object>> illegalArgumentException(IllegalArgumentException ex){
+        Map<String, Object> map = new HashMap<>();
+        map.put("timestamp", LocalDateTime.now());
+        map.put("status", HttpStatus.CONFLICT.value());
+        map.put("error", "Conflict");
+        map.put("message", ex.getLocalizedMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
+    }
 }
+

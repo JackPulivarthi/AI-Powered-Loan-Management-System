@@ -66,11 +66,13 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     public LoanApplicationResponse statusUpdate(StatusUpdate statusUpdate, Integer applicationId) {
         LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
 
+        if(loanApplication.getStatus()!=LoanStatus.PENDING)
+            throw  new IllegalArgumentException("Loan already finalised");
         loanApplication.setStatus(LoanStatus.valueOf(statusUpdate.getStatus()));
 
-        loanApplicationRepository.save(loanApplication);
+        LoanApplication updatedLoanApplication =loanApplicationRepository.save(loanApplication);
 
-        return mapper.mapLoanEntitytoDto(loanApplication);
+        return mapper.mapLoanEntitytoDto(updatedLoanApplication);
     }
 
 
