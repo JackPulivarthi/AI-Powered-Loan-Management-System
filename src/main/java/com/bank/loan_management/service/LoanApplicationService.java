@@ -5,4 +5,5 @@ import com.bank.loan_management.dto.LoanApplicationResponse;
 
 public interface LoanApplicationService {
     LoanApplicationResponse loanApplication(LoanApplicationRequest loanApplicationRequest);
+    LoanApplicationResponse findApplicationById(Integer applicationId);
 }

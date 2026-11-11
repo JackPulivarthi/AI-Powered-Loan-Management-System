@@ -48,6 +48,12 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         return mapper.mapLoanEntitytoDto(loanApplicationRepository.save(loanApplication));
     }
 
+    @Override
+    public LoanApplicationResponse findApplicationById(Integer applicationId) {
+        LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
+        return mapper.mapLoanEntitytoDto(loanApplication);
+    }
+
 
     public static double calculateEmi(double loanAmount, int loanTenureMonths, double annualInterestRate) {
         // 1. Convert annual interest rate to a monthly decimal value
