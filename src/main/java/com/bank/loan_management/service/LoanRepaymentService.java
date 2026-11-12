@@ -9,4 +9,5 @@ public interface LoanRepaymentService {
 
     RepaymentScheduleResponse loanRepaymentsSchedule(Integer applicationId);
     LoanRepaymentResponse markRepaymentAsPaid(Integer repaymentId);
+    LoanRepaymentResponse getRepaymentById(Integer applicationId, Integer repaymentId);
 }

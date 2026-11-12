@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface LoanRepaymentRepository extends JpaRepository<LoanRepayment, Integer> {
     List<LoanRepayment> findByLoanApplication_ApplicationIdOrderByInstallmentNumberAsc(Integer applicationId);
+    LoanRepayment findByLoanApplication_ApplicationIdAndRepaymentId(Integer applicationId, Integer repaymentId);
 }

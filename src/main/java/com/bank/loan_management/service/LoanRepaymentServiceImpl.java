@@ -71,4 +71,13 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
 
         return mapper.mapLoanRepaymentEntitytoDTO(savedRepayment);
     }
+
+    @Override
+    public LoanRepaymentResponse getRepaymentById(Integer applicationId, Integer repaymentId) {
+        loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application id doesnot exist"));
+        loanRepaymentRepository.findById(repaymentId).orElseThrow(()-> new EntityNotFoundException("Repayment not found"));
+        LoanRepayment loanRepayment = loanRepaymentRepository.findByLoanApplication_ApplicationIdAndRepaymentId(applicationId, repaymentId);
+
+        return mapper.mapLoanRepaymentEntitytoDTO(loanRepayment);
+    }
 }
