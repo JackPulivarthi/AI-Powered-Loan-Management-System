@@ -11,4 +11,6 @@ public interface LoanRepaymentRepository extends JpaRepository<LoanRepayment, In
     List<LoanRepayment> findByLoanApplication_ApplicationIdOrderByInstallmentNumberAsc(Integer applicationId);
     LoanRepayment findByLoanApplication_ApplicationIdAndRepaymentId(Integer applicationId, Integer repaymentId);
     List<LoanRepayment> findByDueDateBeforeAndPaymentStatus(LocalDate date, RepaymentStatus repaymentStatus);
+
+    List<LoanRepayment> findByLoanApplication_ApplicationIdAndPaymentStatus(Integer applicationId, RepaymentStatus paymentStatus);
 }
