@@ -26,5 +26,5 @@ public class RepaymentScheduleResponse {
 
     private Integer pendingInstallments;
 
-    private List<LoanRepayment> repayments;
+    private List<LoanRepaymentResponse> repayments;
 }

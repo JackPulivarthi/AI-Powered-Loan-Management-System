@@ -2,6 +2,7 @@ package com.bank.loan_management.dto;
 
 import com.bank.loan_management.entity.LoanApplication;
 import com.bank.loan_management.enums.RepaymentStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,5 +23,6 @@ public class LoanRepaymentResponse {
     private Long emiAmount;
     private RepaymentStatus paymentStatus;
     private LocalDate paidDate;
+    @JsonIgnore
     private LoanApplication loanApplication;
 }

@@ -70,7 +70,7 @@ public class Mapper {
        // return loanApplications.stream().map(this::mapLoanEntitytoDto).toList();
     }
 
-    List<LoanRepaymentResponse> mapLoanRepaymentEntitytoDTO(List<LoanRepayment> loanRepayment){
+    public List<LoanRepaymentResponse> mapLoanRepaymentEntitytoDTO(List<LoanRepayment> loanRepayment){
         if (loanRepayment == null)
             return List.of();
         return loanRepayment.stream().map(loanRepayment1 -> {
