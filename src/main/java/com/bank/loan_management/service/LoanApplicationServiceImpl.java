@@ -14,6 +14,7 @@ import com.bank.loan_management.repository.CustomerRepository;
 import com.bank.loan_management.repository.LoanApplicationRepository;
 import com.bank.loan_management.repository.LoanRepaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -70,6 +71,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         return mapper.mapLoanEntitiestoDTO(loanApplications);
     }
 
+    @Transactional
     @Override
     public LoanApplicationResponse statusUpdate(StatusUpdate statusUpdate, Integer applicationId) {
 
@@ -109,7 +111,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
 
         List<LoanRepayment> loanRepayments= new ArrayList<>();
 
-        for(int i=0; i<= tenure; i++){
+        for(int i=1; i<= tenure; i++){
             LoanRepayment loanRepayment = new LoanRepayment();
             loanRepayment.setInstallmentNumber(i);
             loanRepayment.setDueDate(approvalDate.plusMonths(i));

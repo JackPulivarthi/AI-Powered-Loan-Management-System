@@ -38,10 +38,11 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
         repaymentScheduleResponse.setLoanAmount(loanApplication.getLoanAmount());
         repaymentScheduleResponse.setLoanTenure(loanApplication.getLoanTenure());
         repaymentScheduleResponse.setEmiAmount(loanApplication.getEmi());
-        repaymentScheduleResponse.setTotalInstallments(loanApplication.getLoanTenure());
-
+        repaymentScheduleResponse.setTotalInstallments(loanRepayments.size());
         int paidInstallments = (int) loanRepayments.stream().filter(loanRepayment -> loanRepayment.getPaymentStatus()==RepaymentStatus.PAID).count();
+        int pendingInstallments = loanRepayments.stream().filter(loanRepayment -> loanRepayment.getPaymentStatus()==RepaymentStatus.PENDING).count();
         repaymentScheduleResponse.setPaidInstallments(paidInstallments);
+        repaymentScheduleResponse.setPendingInstallments(pendingInstallments);
         repaymentScheduleResponse.setRepayments(loanRepayments);
 
         return repaymentScheduleResponse;
