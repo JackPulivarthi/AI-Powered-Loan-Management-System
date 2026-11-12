@@ -6,6 +6,8 @@ import com.bank.loan_management.service.LoanRepaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/repayment")
 public class LoanRepaymentController {
@@ -34,5 +36,12 @@ public class LoanRepaymentController {
     public ResponseEntity<LoanRepaymentResponse> getRepaymentbyId(@PathVariable("applicationId") Integer applicationId, @PathVariable("repaymentId") Integer repaymentId){
         LoanRepaymentResponse loanRepaymentResponse = loanRepaymentService.getRepaymentById(applicationId, repaymentId);
         return ResponseEntity.ok(loanRepaymentResponse);
+    }
+
+    @GetMapping("/overdue")
+    public ResponseEntity<List<LoanRepaymentResponse>> overdue(){
+        List<LoanRepaymentResponse> loanRepaymentResponses = loanRepaymentService.overdue();
+        return ResponseEntity.ok(loanRepaymentResponses);
+
     }
 }

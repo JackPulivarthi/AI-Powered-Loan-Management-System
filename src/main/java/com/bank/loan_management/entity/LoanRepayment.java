@@ -24,7 +24,7 @@ public class LoanRepayment {
     private LocalDate dueDate;
     private long emiAmount;
 
-    @Enumerated(EnumType.STRING)
+
     private RepaymentStatus paymentStatus;
     private LocalDate paidDate;
 
