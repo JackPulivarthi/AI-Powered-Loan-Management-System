@@ -54,4 +54,21 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
 
 
     }
+
+    @Override
+    public LoanRepaymentResponse markRepaymentAsPaid(Integer repaymentId) {
+
+        LoanRepayment loanRepayment = loanRepaymentRepository.findById(repaymentId)
+                .orElseThrow(() -> new EntityNotFoundException("Repayment not found"));
+        if (loanRepayment.getPaymentStatus() == RepaymentStatus.PAID) {
+            throw new IllegalStateException("This installment is already paid");
+        }
+
+        loanRepayment.setPaymentStatus(RepaymentStatus.PAID);
+        loanRepayment.setPaidDate(LocalDate.now());
+
+        LoanRepayment savedRepayment = loanRepaymentRepository.save(loanRepayment);
+
+        return mapper.mapLoanRepaymentEntitytoDTO(savedRepayment);
+    }
 }

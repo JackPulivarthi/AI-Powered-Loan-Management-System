@@ -86,4 +86,18 @@ public class Mapper {
             return loanRepaymentResponse;
         }).toList();
     }
+
+    public LoanRepaymentResponse mapLoanRepaymentEntitytoDTO(LoanRepayment repayment) {
+        LoanRepaymentResponse response = new LoanRepaymentResponse();
+
+        response.setRepaymentId(repayment.getRepaymentId());
+        response.setApplicationId(repayment.getLoanApplication().getApplicationId());
+        response.setInstallmentNumber(repayment.getInstallmentNumber());
+        response.setDueDate(repayment.getDueDate());
+        response.setEmiAmount(repayment.getEmiAmount());
+        response.setPaymentStatus(repayment.getPaymentStatus());
+        response.setPaidDate(repayment.getPaidDate());
+
+        return response;
+    }
 }
