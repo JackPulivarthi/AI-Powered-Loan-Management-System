@@ -1,6 +1,5 @@
 package com.bank.loan_management.service;
 
-import com.bank.loan_management.dto.LoanApplicationResponse;
 import com.bank.loan_management.dto.LoanRepaymentResponse;
 import com.bank.loan_management.dto.RepaymentScheduleResponse;
 import com.bank.loan_management.entity.LoanApplication;
@@ -77,7 +76,9 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
         loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application id doesnot exist"));
         loanRepaymentRepository.findById(repaymentId).orElseThrow(()-> new EntityNotFoundException("Repayment not found"));
         LoanRepayment loanRepayment = loanRepaymentRepository.findByLoanApplication_ApplicationIdAndRepaymentId(applicationId, repaymentId);
-
+        if (loanRepayment == null) {
+            throw new EntityNotFoundException("Repayment not found");
+        }
         return mapper.mapLoanRepaymentEntitytoDTO(loanRepayment);
     }
 }

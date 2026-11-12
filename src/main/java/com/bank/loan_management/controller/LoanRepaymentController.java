@@ -3,14 +3,13 @@ package com.bank.loan_management.controller;
 import com.bank.loan_management.dto.LoanRepaymentResponse;
 import com.bank.loan_management.dto.RepaymentScheduleResponse;
 import com.bank.loan_management.service.LoanRepaymentService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/repayment")
 public class LoanRepaymentController {
-    LoanRepaymentService loanRepaymentService;
+    private final LoanRepaymentService loanRepaymentService;
 
     LoanRepaymentController(LoanRepaymentService loanRepaymentService){
         this.loanRepaymentService = loanRepaymentService;

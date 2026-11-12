@@ -23,6 +23,8 @@ public class LoanRepayment {
     private Integer installmentNumber;
     private LocalDate dueDate;
     private long emiAmount;
+
+    @Enumerated(EnumType.STRING)
     private RepaymentStatus paymentStatus;
     private LocalDate paidDate;
 
