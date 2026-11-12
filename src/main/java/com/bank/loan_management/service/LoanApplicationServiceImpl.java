@@ -5,16 +5,21 @@ import com.bank.loan_management.dto.LoanApplicationResponse;
 import com.bank.loan_management.dto.StatusUpdate;
 import com.bank.loan_management.entity.Customer;
 import com.bank.loan_management.entity.LoanApplication;
+import com.bank.loan_management.entity.LoanRepayment;
 import com.bank.loan_management.enums.LoanStatus;
+import com.bank.loan_management.enums.RepaymentStatus;
 import com.bank.loan_management.exception.InvalidLoanStatusException;
 import com.bank.loan_management.mapper.Mapper;
 import com.bank.loan_management.repository.CustomerRepository;
 import com.bank.loan_management.repository.LoanApplicationRepository;
+import com.bank.loan_management.repository.LoanRepaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,12 +28,14 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     private final LoanApplicationRepository loanApplicationRepository;
     private final Mapper mapper;
     private final CustomerRepository customerRepository;
+    private final LoanRepaymentRepository loanRepaymentRepository;
 
 
-    public LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository){
+    public LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository, LoanRepaymentRepository loanRepaymentRepository){
         this.loanApplicationRepository=loanApplicationRepository;
         this.mapper = mapper;
         this.customerRepository = customerRepository;
+        this.loanRepaymentRepository = loanRepaymentRepository;
     }
 
     @Override
@@ -43,7 +50,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         loanApplication.setLoanTenure(loanApplicationRequest.getLoanTenure());
         loanApplication.setMonthlyIncome(loanApplicationRequest.getMonthlyIncome());
 
-        double emi =calculateEmi(loanApplicationRequest.getLoanAmount(),loanApplicationRequest.getLoanTenure(),12.0);
+        long emi = (long) calculateEmi(loanApplicationRequest.getLoanAmount(),loanApplicationRequest.getLoanTenure(),12.0);
         loanApplication.setEmi(emi);
 
         loanApplication.setStatus(LoanStatus.PENDING);
@@ -65,11 +72,15 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
 
     @Override
     public LoanApplicationResponse statusUpdate(StatusUpdate statusUpdate, Integer applicationId) {
+
         LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
 
         if(loanApplication.getStatus()!=LoanStatus.PENDING)
             throw  new InvalidLoanStatusException("Loan already finalised");
         loanApplication.setStatus(LoanStatus.valueOf(statusUpdate.getStatus()));
+
+        if(loanApplication.getStatus()==LoanStatus.APPROVED)
+            generateRepaymentSchedule(loanApplication);
 
         LoanApplication updatedLoanApplication =loanApplicationRepository.save(loanApplication);
 
@@ -89,5 +100,27 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         return BigDecimal.valueOf(emi)
                 .setScale(2, RoundingMode.HALF_UP)
                 .doubleValue();
+    }
+
+    public void generateRepaymentSchedule(LoanApplication loanApplication){
+        int tenure = loanApplication.getLoanTenure();
+        long emiAmount = loanApplication.getEmi();
+        LocalDate approvalDate = LocalDate.now();
+
+        List<LoanRepayment> loanRepayments= new ArrayList<>();
+
+        for(int i=0; i<= tenure; i++){
+            LoanRepayment loanRepayment = new LoanRepayment();
+            loanRepayment.setInstallmentNumber(i);
+            loanRepayment.setDueDate(approvalDate.plusMonths(i));
+            loanRepayment.setEmiAmount(emiAmount);
+            loanRepayment.setPaymentStatus(RepaymentStatus.PENDING);
+            loanRepayment.setPaidDate(null);
+            loanRepayment.setLoanApplication(loanApplication);
+            loanRepayments.add(loanRepayment);
+        }
+        loanRepaymentRepository.saveAll(loanRepayments);
+
+
     }
 }

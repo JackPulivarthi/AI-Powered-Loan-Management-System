@@ -3,8 +3,10 @@ package com.bank.loan_management.mapper;
 import com.bank.loan_management.dto.CustomerRequest;
 import com.bank.loan_management.dto.CustomerResponse;
 import com.bank.loan_management.dto.LoanApplicationResponse;
+import com.bank.loan_management.dto.LoanRepaymentResponse;
 import com.bank.loan_management.entity.Customer;
 import com.bank.loan_management.entity.LoanApplication;
+import com.bank.loan_management.entity.LoanRepayment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -66,5 +68,22 @@ public class Mapper {
         }).toList();
 
        // return loanApplications.stream().map(this::mapLoanEntitytoDto).toList();
+    }
+
+    List<LoanRepaymentResponse> mapLoanRepaymentEntitytoDTO(List<LoanRepayment> loanRepayment){
+        if (loanRepayment == null)
+            return List.of();
+        return loanRepayment.stream().map(loanRepayment1 -> {
+            LoanRepaymentResponse loanRepaymentResponse = new LoanRepaymentResponse();
+            loanRepaymentResponse.setRepaymentId(loanRepayment1.getRepaymentId());
+            loanRepaymentResponse.setDueDate(loanRepayment1.getDueDate());
+            loanRepaymentResponse.setEmiAmount(loanRepayment1.getEmiAmount());
+            loanRepaymentResponse.setInstallmentNumber(loanRepayment1.getInstallmentNumber());
+            loanRepaymentResponse.setPaidDate(loanRepayment1.getPaidDate());
+            loanRepaymentResponse.setPaymentStatus(loanRepayment1.getPaymentStatus());
+            loanRepaymentResponse.setLoanApplication(loanRepayment1.getLoanApplication());
+
+            return loanRepaymentResponse;
+        }).toList();
     }
 }

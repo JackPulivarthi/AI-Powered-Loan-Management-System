@@ -1,8 +1,11 @@
 package com.bank.loan_management.entity;
 
 import com.bank.loan_management.enums.LoanStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -24,6 +27,7 @@ public class LoanApplication {
     @Column(name = "application_Id")
     private Integer applicationId;
 
+    @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne
@@ -40,13 +44,14 @@ public class LoanApplication {
     private Long monthlyIncome;
 
     @Column(name = "emi")
-    private double emi;
+    private Long emi;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private LoanStatus status;
 
-
+    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL)
+    private List<LoanRepayment> loanRepayments;
 
 
 }

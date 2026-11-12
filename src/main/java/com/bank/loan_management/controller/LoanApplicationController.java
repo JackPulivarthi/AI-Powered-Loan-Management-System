@@ -2,6 +2,7 @@ package com.bank.loan_management.controller;
 
 import com.bank.loan_management.dto.LoanApplicationRequest;
 import com.bank.loan_management.dto.LoanApplicationResponse;
+import com.bank.loan_management.dto.RepaymentScheduleResponse;
 import com.bank.loan_management.dto.StatusUpdate;
 import com.bank.loan_management.enums.LoanStatus;
 import com.bank.loan_management.service.LoanApplicationService;
