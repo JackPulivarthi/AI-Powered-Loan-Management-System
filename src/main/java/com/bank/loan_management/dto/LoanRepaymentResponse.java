@@ -23,6 +23,5 @@ public class LoanRepaymentResponse {
     private Long emiAmount;
     private RepaymentStatus paymentStatus;
     private LocalDate paidDate;
-    @JsonIgnore
-    private LoanApplication loanApplication;
+    private Integer applicationId;
 }

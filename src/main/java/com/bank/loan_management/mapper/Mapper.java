@@ -81,7 +81,7 @@ public class Mapper {
             loanRepaymentResponse.setInstallmentNumber(loanRepayment1.getInstallmentNumber());
             loanRepaymentResponse.setPaidDate(loanRepayment1.getPaidDate());
             loanRepaymentResponse.setPaymentStatus(loanRepayment1.getPaymentStatus());
-            loanRepaymentResponse.setLoanApplication(loanRepayment1.getLoanApplication());
+            loanRepaymentResponse.setApplicationId(loanRepayment1.getLoanApplication().getApplicationId());
 
             return loanRepaymentResponse;
         }).toList();
