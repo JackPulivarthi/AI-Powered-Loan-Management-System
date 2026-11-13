@@ -41,4 +41,27 @@ public class EmailServiceImpl implements EmailService{
             log.error("Failed to send application confirmation email", exception);
         }
     }
+
+    @Override
+    public void sendLoanApprovalEmail(String to, Integer applicationId, long loanAmount) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(to);
+        message.setSubject("Your Loan Application Has Been Approved");
+
+        message.setText(
+                "Dear Customer,\n\n" +
+                        "Congratulations! Your loan application has been approved successfully.\n\n" +
+                        "Application ID: " + applicationId + "\n" +
+                        "Approved Loan Amount: ₹" + loanAmount + "\n\n" +
+                        "Thank you for choosing our bank."
+        );
+
+        try {
+            javaMailSender.send(message);
+        } catch (MailException exception) {
+            log.error("Failed to send loan approval email for applicationId {}", applicationId, exception);
+        }
+    }
 }

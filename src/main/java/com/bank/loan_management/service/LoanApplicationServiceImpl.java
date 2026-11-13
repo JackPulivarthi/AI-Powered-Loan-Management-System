@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class LoanApplicationServiceImpl implements LoanApplicationService{
+public class LoanApplicationServiceImpl implements LoanApplicationService {
 
     private final LoanApplicationRepository loanApplicationRepository;
     private final Mapper mapper;
@@ -35,8 +35,8 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     private final EmailService emailService;
 
 
-    public LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository, LoanRepaymentRepository loanRepaymentRepository, EmailService emailService){
-        this.loanApplicationRepository=loanApplicationRepository;
+    public LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository, LoanRepaymentRepository loanRepaymentRepository, EmailService emailService) {
+        this.loanApplicationRepository = loanApplicationRepository;
         this.mapper = mapper;
         this.customerRepository = customerRepository;
         this.loanRepaymentRepository = loanRepaymentRepository;
@@ -48,14 +48,14 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
 
         LoanApplication loanApplication = new LoanApplication();
 
-        Customer customer = customerRepository.findById(loanApplicationRequest.getCustomerId()).orElseThrow(()-> new EntityNotFoundException("Customer not found"));
+        Customer customer = customerRepository.findById(loanApplicationRequest.getCustomerId()).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
         loanApplication.setCustomer(customer);
 
         loanApplication.setLoanAmount(loanApplicationRequest.getLoanAmount());
         loanApplication.setLoanTenure(loanApplicationRequest.getLoanTenure());
         loanApplication.setMonthlyIncome(loanApplicationRequest.getMonthlyIncome());
 
-        long emi = (long) calculateEmi(loanApplicationRequest.getLoanAmount(),loanApplicationRequest.getLoanTenure(),12.0);
+        long emi = (long) calculateEmi(loanApplicationRequest.getLoanAmount(), loanApplicationRequest.getLoanTenure(), 12.0);
         loanApplication.setEmi(emi);
 
         loanApplication.setStatus(LoanStatus.PENDING);
@@ -63,19 +63,19 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         LoanApplication loanApplication1 = loanApplicationRepository.save(loanApplication);
         String emailId = loanApplication1.getCustomer().getCustomerEmailAddress();
         Integer applicationId = loanApplication1.getApplicationId();
-        emailService.sendApplicationConfirmationEmail(emailId,applicationId);
+        emailService.sendApplicationConfirmationEmail(emailId, applicationId);
         return mapper.mapLoanEntitytoDto(loanApplication1);
     }
 
     @Override
     public LoanApplicationResponse findApplicationById(Integer applicationId) {
-        LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
+        LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(() -> new EntityNotFoundException("Application not found"));
         return mapper.mapLoanEntitytoDto(loanApplication);
     }
 
     @Override
     public List<LoanApplicationResponse> getAllLoanApplications() {
-        List<LoanApplication> loanApplications= loanApplicationRepository.findAll();
+        List<LoanApplication> loanApplications = loanApplicationRepository.findAll();
         return mapper.mapLoanEntitiestoDTO(loanApplications);
     }
 
@@ -83,16 +83,23 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     @Override
     public LoanApplicationResponse statusUpdate(StatusUpdate statusUpdate, Integer applicationId) {
 
-        LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
+        LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(() -> new EntityNotFoundException("Application not found"));
 
-        if(loanApplication.getStatus()!=LoanStatus.PENDING)
-            throw  new InvalidLoanStatusException("Loan already finalised");
+        if (loanApplication.getStatus() != LoanStatus.PENDING)
+            throw new InvalidLoanStatusException("Loan already finalised");
         loanApplication.setStatus(LoanStatus.valueOf(statusUpdate.getStatus()));
 
-        if(loanApplication.getStatus()==LoanStatus.APPROVED)
+        if (loanApplication.getStatus() == LoanStatus.APPROVED) {
             generateRepaymentSchedule(loanApplication);
+            String email = loanApplication.getCustomer()
+                    .getCustomerEmailAddress();
 
-        LoanApplication updatedLoanApplication =loanApplicationRepository.save(loanApplication);
+            long loanAmount = loanApplication.getLoanAmount();
+
+            emailService.sendLoanApprovalEmail(email, applicationId, loanAmount);
+        }
+
+        LoanApplication updatedLoanApplication = loanApplicationRepository.save(loanApplication);
 
         return mapper.mapLoanEntitytoDto(updatedLoanApplication);
     }
