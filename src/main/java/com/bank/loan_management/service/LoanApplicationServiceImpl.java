@@ -141,6 +141,8 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
             } else
                 throw new InvalidLoanClosureRequestException("Invalid loan closure request");
         }
+        else
+            throw new InvalidLoanClosureRequestException("Invalid loan closure request");
         ClosedLoanResponse closedLoanResponse = new ClosedLoanResponse();
         closedLoanResponse.setApplicationId(applicationId);
         closedLoanResponse.setLoanStatus(LoanStatus.CLOSED);
