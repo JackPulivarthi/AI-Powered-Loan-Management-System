@@ -13,5 +13,5 @@ public interface LoanRepaymentService {
     RepaymentTotalPaidResponse totalPaidAmount(Integer applicationId);
     TotalAmountResponse totalAmountOutstanding(Integer applicationId);
     RepaymentHistoryResponse repaymentHistory(Integer applicationId);
-    ClosedLoanResponse closedLoan(Integer applicationId);
+
 }

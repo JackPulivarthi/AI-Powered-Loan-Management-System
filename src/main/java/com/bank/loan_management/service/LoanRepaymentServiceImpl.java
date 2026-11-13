@@ -128,24 +128,4 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
         return repaymentHistoryResponse;
     }
 
-    @Override
-    public ClosedLoanResponse closedLoan(Integer applicationId) {
-        loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
-        List<LoanRepayment> loanRepayments = loanRepaymentRepository.findByLoanApplication_ApplicationIdOrderByInstallmentNumberAsc(applicationId);
-        boolean closed = loanRepayments.stream().filter(loanRepayment -> loanRepayment.getPaymentStatus()== RepaymentStatus.PAID).count() == loanRepayments.size();
-        if(closed){
-            LoanApplication loanApplication = new LoanApplication();
-            loanApplication.setStatus(LoanStatus.CLOSED);
-            loanApplicationRepository.save(loanApplication);
-        }else
-            throw new InvalidLoanClosureRequestException("Invalid loan closure request");
-
-        ClosedLoanResponse closedLoanResponse = new ClosedLoanResponse();
-        closedLoanResponse.setApplicationId(applicationId);
-        closedLoanResponse.setLoanStatus(LoanStatus.CLOSED);
-        closedLoanResponse.setMessage("Loan closed successfully");
-        return closedLoanResponse;
-    }
-
-
 }

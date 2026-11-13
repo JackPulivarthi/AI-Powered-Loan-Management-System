@@ -65,9 +65,4 @@ public class LoanRepaymentController {
         return ResponseEntity.ok(repaymentHistoryResponse);
     }
 
-    @PatchMapping("{applicationId}/close")
-    public ResponseEntity<ClosedLoanResponse> closedLoan(@PathVariable("applicationId") Integer applicationId){
-        ClosedLoanResponse closedLoanResponse = loanRepaymentService.closedLoan(applicationId);
-        return ResponseEntity.ok(closedLoanResponse);
-    }
 }

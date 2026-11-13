@@ -1,5 +1,6 @@
 package com.bank.loan_management.service;
 
+import com.bank.loan_management.dto.ClosedLoanResponse;
 import com.bank.loan_management.dto.LoanApplicationRequest;
 import com.bank.loan_management.dto.LoanApplicationResponse;
 import com.bank.loan_management.dto.StatusUpdate;
@@ -8,6 +9,7 @@ import com.bank.loan_management.entity.LoanApplication;
 import com.bank.loan_management.entity.LoanRepayment;
 import com.bank.loan_management.enums.LoanStatus;
 import com.bank.loan_management.enums.RepaymentStatus;
+import com.bank.loan_management.exception.InvalidLoanClosureRequestException;
 import com.bank.loan_management.exception.InvalidLoanStatusException;
 import com.bank.loan_management.mapper.Mapper;
 import com.bank.loan_management.repository.CustomerRepository;
@@ -124,5 +126,25 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         loanRepaymentRepository.saveAll(loanRepayments);
 
 
+    }
+
+    @Override
+    public ClosedLoanResponse closedLoan(Integer applicationId) {
+        LoanApplication loanApplication =loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
+        List<LoanRepayment> loanRepayments = loanRepaymentRepository.findByLoanApplication_ApplicationIdOrderByInstallmentNumberAsc(applicationId);
+        if(!loanRepayments.isEmpty()) {
+            boolean closed = loanRepayments.stream().filter(loanRepayment -> loanRepayment.getPaymentStatus() == RepaymentStatus.PAID).count() == loanRepayments.size();
+
+            if (closed) {
+                loanApplication.setStatus(LoanStatus.CLOSED);
+                loanApplicationRepository.save(loanApplication);
+            } else
+                throw new InvalidLoanClosureRequestException("Invalid loan closure request");
+        }
+        ClosedLoanResponse closedLoanResponse = new ClosedLoanResponse();
+        closedLoanResponse.setApplicationId(applicationId);
+        closedLoanResponse.setLoanStatus(LoanStatus.CLOSED);
+        closedLoanResponse.setMessage("Loan closed successfully");
+        return closedLoanResponse;
     }
 }

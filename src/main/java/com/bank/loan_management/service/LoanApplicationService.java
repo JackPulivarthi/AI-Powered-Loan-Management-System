@@ -1,5 +1,6 @@
 package com.bank.loan_management.service;
 
+import com.bank.loan_management.dto.ClosedLoanResponse;
 import com.bank.loan_management.dto.LoanApplicationRequest;
 import com.bank.loan_management.dto.LoanApplicationResponse;
 import com.bank.loan_management.dto.StatusUpdate;
@@ -13,4 +14,5 @@ public interface LoanApplicationService {
     LoanApplicationResponse findApplicationById(Integer applicationId);
     List<LoanApplicationResponse> getAllLoanApplications();
     LoanApplicationResponse statusUpdate(StatusUpdate statusUpdate, Integer applicationId);
+    ClosedLoanResponse closedLoan(Integer applicationId);
 }
