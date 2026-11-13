@@ -151,13 +151,17 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
                     .allMatch(loanRepayment -> loanRepayment.getPaymentStatus() == RepaymentStatus.PAID);
 
             if (closed) {
-                loanApplication.setStatus(LoanStatus.CLOSED);
-                loanApplicationRepository.save(loanApplication);
-                return true;
+                if(loanApplication.getStatus()==LoanStatus.APPROVED) {
+                    loanApplication.setStatus(LoanStatus.CLOSED);
+                    loanApplicationRepository.save(loanApplication);
+                    return true;
+                }
             } else
                 return false;
         }
         else
             return false;
+        return false;
     }
+
 }
