@@ -64,7 +64,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         String emailId = loanApplication1.getCustomer().getCustomerEmailAddress();
         Integer applicationId = loanApplication1.getApplicationId();
         emailService.sendApplicationConfirmationEmail(emailId,applicationId);
-        return mapper.mapLoanEntitytoDto(loanApplicationRepository.save(loanApplication1));
+        return mapper.mapLoanEntitytoDto(loanApplication1);
     }
 
     @Override

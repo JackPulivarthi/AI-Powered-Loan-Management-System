@@ -34,7 +34,7 @@ public class EmailServiceImpl implements EmailService{
                         "Thank you for choosing our bank."
         );
 
-        message.setFrom("random@gmail.com");
+        message.setFrom("pulivarthijackmain@gmail.com");
         try {
             javaMailSender.send(message);
         }catch (MailException exception){
