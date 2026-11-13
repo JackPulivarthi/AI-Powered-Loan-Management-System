@@ -9,6 +9,7 @@ import com.bank.loan_management.entity.LoanApplication;
 import com.bank.loan_management.entity.LoanRepayment;
 import com.bank.loan_management.enums.LoanStatus;
 import com.bank.loan_management.enums.RepaymentStatus;
+import com.bank.loan_management.event.LoanApprovedEvent;
 import com.bank.loan_management.exception.InvalidLoanClosureRequestException;
 import com.bank.loan_management.exception.InvalidLoanStatusException;
 import com.bank.loan_management.mapper.Mapper;
@@ -17,6 +18,7 @@ import com.bank.loan_management.repository.LoanApplicationRepository;
 import com.bank.loan_management.repository.LoanRepaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,14 +35,16 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     private final CustomerRepository customerRepository;
     private final LoanRepaymentRepository loanRepaymentRepository;
     private final EmailService emailService;
+    private final ApplicationEventPublisher eventPublisher;
 
 
-    public LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository, LoanRepaymentRepository loanRepaymentRepository, EmailService emailService) {
+    public LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository, LoanRepaymentRepository loanRepaymentRepository, EmailService emailService, ApplicationEventPublisher eventPublisher) {
         this.loanApplicationRepository = loanApplicationRepository;
         this.mapper = mapper;
         this.customerRepository = customerRepository;
         this.loanRepaymentRepository = loanRepaymentRepository;
         this.emailService = emailService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -89,17 +93,20 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
             throw new InvalidLoanStatusException("Loan already finalised");
         loanApplication.setStatus(LoanStatus.valueOf(statusUpdate.getStatus()));
 
+        LoanApplication updatedLoanApplication = loanApplicationRepository.save(loanApplication);
+
         if (loanApplication.getStatus() == LoanStatus.APPROVED) {
             generateRepaymentSchedule(loanApplication);
             String email = loanApplication.getCustomer()
                     .getCustomerEmailAddress();
 
             long loanAmount = loanApplication.getLoanAmount();
-
-            emailService.sendLoanApprovalEmail(email, applicationId, loanAmount);
+            Integer id = updatedLoanApplication.getApplicationId();
+            //emailService.sendLoanApprovalEmail(email, applicationId, loanAmount);
+            eventPublisher.publishEvent(
+                    new LoanApprovedEvent(id, email, loanAmount)
+            );
         }
-
-        LoanApplication updatedLoanApplication = loanApplicationRepository.save(loanApplication);
 
         return mapper.mapLoanEntitytoDto(updatedLoanApplication);
     }

@@ -1,5 +1,6 @@
 package com.bank.loan_management.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,6 +13,8 @@ public class EmailServiceImpl implements EmailService{
 
     private final JavaMailSender javaMailSender;
 
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     public EmailServiceImpl(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
@@ -34,7 +37,7 @@ public class EmailServiceImpl implements EmailService{
                         "Thank you for choosing our bank."
         );
 
-        message.setFrom("pulivarthijackmain@gmail.com");
+        message.setFrom(fromEmail);
         try {
             javaMailSender.send(message);
         }catch (MailException exception){
