@@ -22,11 +22,13 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
     private final LoanApplicationRepository loanApplicationRepository;
     private final LoanRepaymentRepository loanRepaymentRepository;
     private final Mapper mapper;
+    private final LoanApplicationService loanApplicationService;
 
-    public LoanRepaymentServiceImpl(LoanApplicationRepository loanApplicationRepository, LoanRepaymentRepository loanRepaymentRepository, Mapper mapper){
+    public LoanRepaymentServiceImpl(LoanApplicationRepository loanApplicationRepository, LoanRepaymentRepository loanRepaymentRepository, Mapper mapper, LoanApplicationService loanApplicationService){
         this.loanApplicationRepository = loanApplicationRepository;
         this.loanRepaymentRepository = loanRepaymentRepository;
         this.mapper = mapper;
+        this.loanApplicationService = loanApplicationService;
     }
 
     @Override
@@ -68,6 +70,9 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
         loanRepayment.setPaidDate(LocalDate.now());
 
         LoanRepayment savedRepayment = loanRepaymentRepository.save(loanRepayment);
+
+        Integer applicationId = loanRepayment.getLoanApplication().getApplicationId();
+        loanApplicationService.closeLoanIfAllInstallmentsPaid(applicationId);
 
         return mapper.mapLoanRepaymentEntitytoDTO(savedRepayment);
     }

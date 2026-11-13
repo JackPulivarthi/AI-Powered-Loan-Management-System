@@ -15,4 +15,5 @@ public interface LoanApplicationService {
     List<LoanApplicationResponse> getAllLoanApplications();
     LoanApplicationResponse statusUpdate(StatusUpdate statusUpdate, Integer applicationId);
     ClosedLoanResponse closedLoan(Integer applicationId);
+    void closeLoanIfAllInstallmentsPaid(Integer applicationId);
 }

@@ -127,13 +127,25 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
 
 
     }
-
+    @Transactional
     @Override
     public ClosedLoanResponse closedLoan(Integer applicationId) {
+        closeLoanIfAllInstallmentsPaid(applicationId);
+
+        ClosedLoanResponse closedLoanResponse = new ClosedLoanResponse();
+        closedLoanResponse.setApplicationId(applicationId);
+        closedLoanResponse.setLoanStatus(LoanStatus.CLOSED);
+        closedLoanResponse.setMessage("Loan closed successfully");
+        return closedLoanResponse;
+    }
+
+    @Override
+    public void closeLoanIfAllInstallmentsPaid(Integer applicationId) {
         LoanApplication loanApplication =loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
         List<LoanRepayment> loanRepayments = loanRepaymentRepository.findByLoanApplication_ApplicationIdOrderByInstallmentNumberAsc(applicationId);
         if(!loanRepayments.isEmpty()) {
-            boolean closed = loanRepayments.stream().filter(loanRepayment -> loanRepayment.getPaymentStatus() == RepaymentStatus.PAID).count() == loanRepayments.size();
+            boolean closed = loanRepayments.stream()
+                    .allMatch(loanRepayment -> loanRepayment.getPaymentStatus() == RepaymentStatus.PAID);
 
             if (closed) {
                 loanApplication.setStatus(LoanStatus.CLOSED);
@@ -143,10 +155,5 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
         }
         else
             throw new InvalidLoanClosureRequestException("Invalid loan closure request");
-        ClosedLoanResponse closedLoanResponse = new ClosedLoanResponse();
-        closedLoanResponse.setApplicationId(applicationId);
-        closedLoanResponse.setLoanStatus(LoanStatus.CLOSED);
-        closedLoanResponse.setMessage("Loan closed successfully");
-        return closedLoanResponse;
     }
 }
