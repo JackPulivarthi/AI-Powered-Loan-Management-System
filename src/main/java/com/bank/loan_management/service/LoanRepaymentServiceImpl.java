@@ -5,16 +5,15 @@ import com.bank.loan_management.entity.LoanApplication;
 import com.bank.loan_management.entity.LoanRepayment;
 import com.bank.loan_management.enums.LoanStatus;
 import com.bank.loan_management.enums.RepaymentStatus;
-import com.bank.loan_management.exception.InvalidLoanClosureRequestException;
 import com.bank.loan_management.mapper.Mapper;
 import com.bank.loan_management.repository.LoanApplicationRepository;
 import com.bank.loan_management.repository.LoanRepaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class LoanRepaymentServiceImpl implements LoanRepaymentService{
@@ -57,6 +56,7 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
 
     }
 
+    @Transactional
     @Override
     public LoanRepaymentResponse markRepaymentAsPaid(Integer repaymentId) {
 

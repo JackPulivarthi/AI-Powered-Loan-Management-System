@@ -146,22 +146,21 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     public boolean closeLoanIfAllInstallmentsPaid(Integer applicationId) {
         LoanApplication loanApplication =loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
         List<LoanRepayment> loanRepayments = loanRepaymentRepository.findByLoanApplication_ApplicationIdOrderByInstallmentNumberAsc(applicationId);
-        if(!loanRepayments.isEmpty()) {
-            boolean closed = loanRepayments.stream()
-                    .allMatch(loanRepayment -> loanRepayment.getPaymentStatus() == RepaymentStatus.PAID);
-
-            if (closed) {
-                if(loanApplication.getStatus()==LoanStatus.APPROVED) {
-                    loanApplication.setStatus(LoanStatus.CLOSED);
-                    loanApplicationRepository.save(loanApplication);
-                    return true;
-                }
-            } else
-                return false;
-        }
-        else
+        if (loanRepayments.isEmpty()) {
             return false;
-        return false;
+        }
+
+        boolean allPaid = loanRepayments.stream()
+                .allMatch(r -> r.getPaymentStatus() == RepaymentStatus.PAID);
+
+        if (!allPaid || loanApplication.getStatus() != LoanStatus.APPROVED) {
+            return false;
+        }
+
+        loanApplication.setStatus(LoanStatus.CLOSED);
+        loanApplicationRepository.save(loanApplication);
+
+        return true;
     }
 
 }
