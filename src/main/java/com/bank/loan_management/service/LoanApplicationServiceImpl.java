@@ -130,17 +130,20 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     @Transactional
     @Override
     public ClosedLoanResponse closedLoan(Integer applicationId) {
-        closeLoanIfAllInstallmentsPaid(applicationId);
-
-        ClosedLoanResponse closedLoanResponse = new ClosedLoanResponse();
-        closedLoanResponse.setApplicationId(applicationId);
-        closedLoanResponse.setLoanStatus(LoanStatus.CLOSED);
-        closedLoanResponse.setMessage("Loan closed successfully");
-        return closedLoanResponse;
+        boolean close =closeLoanIfAllInstallmentsPaid(applicationId);
+        if(close) {
+            ClosedLoanResponse closedLoanResponse = new ClosedLoanResponse();
+            closedLoanResponse.setApplicationId(applicationId);
+            closedLoanResponse.setLoanStatus(LoanStatus.CLOSED);
+            closedLoanResponse.setMessage("Loan closed successfully");
+            return closedLoanResponse;
+        }else {
+            throw new InvalidLoanClosureRequestException("Invalid closure loan request");
+        }
     }
 
     @Override
-    public void closeLoanIfAllInstallmentsPaid(Integer applicationId) {
+    public boolean closeLoanIfAllInstallmentsPaid(Integer applicationId) {
         LoanApplication loanApplication =loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
         List<LoanRepayment> loanRepayments = loanRepaymentRepository.findByLoanApplication_ApplicationIdOrderByInstallmentNumberAsc(applicationId);
         if(!loanRepayments.isEmpty()) {
@@ -150,10 +153,11 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
             if (closed) {
                 loanApplication.setStatus(LoanStatus.CLOSED);
                 loanApplicationRepository.save(loanApplication);
+                return true;
             } else
-                throw new InvalidLoanClosureRequestException("Invalid loan closure request");
+                return false;
         }
         else
-            throw new InvalidLoanClosureRequestException("Invalid loan closure request");
+            return false;
     }
 }

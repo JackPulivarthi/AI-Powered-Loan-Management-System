@@ -72,7 +72,7 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
         LoanRepayment savedRepayment = loanRepaymentRepository.save(loanRepayment);
 
         Integer applicationId = loanRepayment.getLoanApplication().getApplicationId();
-        loanApplicationService.closeLoanIfAllInstallmentsPaid(applicationId);
+        boolean close =loanApplicationService.closeLoanIfAllInstallmentsPaid(applicationId);
 
         return mapper.mapLoanRepaymentEntitytoDTO(savedRepayment);
     }
