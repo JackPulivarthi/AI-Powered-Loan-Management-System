@@ -32,13 +32,15 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
     private final Mapper mapper;
     private final CustomerRepository customerRepository;
     private final LoanRepaymentRepository loanRepaymentRepository;
+    private final EmailService emailService;
 
 
-    public LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository, LoanRepaymentRepository loanRepaymentRepository){
+    public LoanApplicationServiceImpl(LoanApplicationRepository loanApplicationRepository, Mapper mapper, CustomerRepository customerRepository, LoanRepaymentRepository loanRepaymentRepository, EmailService emailService){
         this.loanApplicationRepository=loanApplicationRepository;
         this.mapper = mapper;
         this.customerRepository = customerRepository;
         this.loanRepaymentRepository = loanRepaymentRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -58,7 +60,11 @@ public class LoanApplicationServiceImpl implements LoanApplicationService{
 
         loanApplication.setStatus(LoanStatus.PENDING);
 
-        return mapper.mapLoanEntitytoDto(loanApplicationRepository.save(loanApplication));
+        LoanApplication loanApplication1 = loanApplicationRepository.save(loanApplication);
+        String emailId = loanApplication1.getCustomer().getCustomerEmailAddress();
+        Integer applicationId = loanApplication1.getApplicationId();
+        emailService.sendApplicationConfirmationEmail(emailId,applicationId);
+        return mapper.mapLoanEntitytoDto(loanApplicationRepository.save(loanApplication1));
     }
 
     @Override
