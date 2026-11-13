@@ -3,6 +3,7 @@ package com.bank.loan_management.controller;
 import com.bank.loan_management.dto.LoanRepaymentResponse;
 import com.bank.loan_management.dto.RepaymentScheduleResponse;
 import com.bank.loan_management.dto.RepaymentTotalPaidResponse;
+import com.bank.loan_management.dto.TotalAmountResponse;
 import com.bank.loan_management.service.LoanRepaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,8 +48,14 @@ public class LoanRepaymentController {
     }
 
     @GetMapping("/{applicationId}/total-paid")
-    public ResponseEntity<RepaymentTotalPaidResponse> totalPayment(@PathVariable("applicationId") Integer applicationbId){
-        RepaymentTotalPaidResponse repaymentTotalPaidResponse = loanRepaymentService.totalPaidAmount(applicationbId);
+    public ResponseEntity<RepaymentTotalPaidResponse> totalPayment(@PathVariable("applicationId") Integer applicationId){
+        RepaymentTotalPaidResponse repaymentTotalPaidResponse = loanRepaymentService.totalPaidAmount(applicationId);
         return ResponseEntity.ok(repaymentTotalPaidResponse);
+    }
+
+    @GetMapping("{applicationId}/outstanding")
+    public ResponseEntity<TotalAmountResponse> totalAmountOutstanding(@PathVariable("applicationId") Integer applicationId){
+        TotalAmountResponse totalAmountResponse = loanRepaymentService.totalAmountOutstanding(applicationId);
+        return ResponseEntity.ok(totalAmountResponse);
     }
 }

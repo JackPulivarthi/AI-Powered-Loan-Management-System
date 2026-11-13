@@ -3,6 +3,7 @@ package com.bank.loan_management.service;
 import com.bank.loan_management.dto.LoanRepaymentResponse;
 import com.bank.loan_management.dto.RepaymentScheduleResponse;
 import com.bank.loan_management.dto.RepaymentTotalPaidResponse;
+import com.bank.loan_management.dto.TotalAmountResponse;
 import com.bank.loan_management.entity.LoanApplication;
 import com.bank.loan_management.entity.LoanRepayment;
 import com.bank.loan_management.enums.LoanStatus;
@@ -103,6 +104,19 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
         repaymentTotalPaidResponse.setTotalAmountPaid(total);
 
         return repaymentTotalPaidResponse;
+    }
+
+    @Override
+    public TotalAmountResponse totalAmountOutstanding(Integer applicationId) {
+        LoanApplication loanApplication = loanApplicationRepository.findById(applicationId).orElseThrow(()-> new EntityNotFoundException("Application not found"));
+        RepaymentTotalPaidResponse repaymentTotalPaidResponse = totalPaidAmount(applicationId);
+        Long outstandingAmount = loanApplication.getLoanAmount() - repaymentTotalPaidResponse.getTotalAmountPaid();
+        TotalAmountResponse totalAmountResponse = new TotalAmountResponse();
+        totalAmountResponse.setApplicationId(loanApplication.getApplicationId());
+        totalAmountResponse.setLoanAmount(loanApplication.getLoanAmount());
+        totalAmountResponse.setTotalAmountOutstanding(outstandingAmount);
+        totalAmountResponse.setTotalAmountPaid(repaymentTotalPaidResponse.getTotalAmountPaid());
+        return totalAmountResponse;
     }
 
 
