@@ -1,9 +1,6 @@
 package com.bank.loan_management.service;
 
-import com.bank.loan_management.dto.LoanRepaymentResponse;
-import com.bank.loan_management.dto.RepaymentScheduleResponse;
-import com.bank.loan_management.dto.RepaymentTotalPaidResponse;
-import com.bank.loan_management.dto.TotalAmountResponse;
+import com.bank.loan_management.dto.*;
 import com.bank.loan_management.entity.LoanApplication;
 import com.bank.loan_management.entity.LoanRepayment;
 import com.bank.loan_management.enums.LoanStatus;
@@ -117,6 +114,17 @@ public class LoanRepaymentServiceImpl implements LoanRepaymentService{
         totalAmountResponse.setTotalAmountOutstanding(outstandingAmount);
         totalAmountResponse.setTotalAmountPaid(repaymentTotalPaidResponse.getTotalAmountPaid());
         return totalAmountResponse;
+    }
+
+    @Override
+    public RepaymentHistoryResponse repaymentHistory(Integer applicationId) {
+        loanApplicationRepository.findById(applicationId).orElseThrow(() -> new EntityNotFoundException("Application not found"));
+        List<LoanRepayment> repayments = loanRepaymentRepository.findByLoanApplication_ApplicationIdOrderByInstallmentNumberAsc(applicationId);
+        RepaymentHistoryResponse repaymentHistoryResponse = new RepaymentHistoryResponse();
+        repaymentHistoryResponse.setApplicationId(applicationId);
+        repaymentHistoryResponse.setLoanRepaymentResponses(mapper.mapLoanRepaymentEntitytoDTO(repayments));
+
+        return repaymentHistoryResponse;
     }
 
 

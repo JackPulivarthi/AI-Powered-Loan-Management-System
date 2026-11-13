@@ -1,9 +1,6 @@
 package com.bank.loan_management.service;
 
-import com.bank.loan_management.dto.LoanRepaymentResponse;
-import com.bank.loan_management.dto.RepaymentScheduleResponse;
-import com.bank.loan_management.dto.RepaymentTotalPaidResponse;
-import com.bank.loan_management.dto.TotalAmountResponse;
+import com.bank.loan_management.dto.*;
 
 import java.util.List;
 
@@ -15,4 +12,5 @@ public interface LoanRepaymentService {
     List<LoanRepaymentResponse> overdue();
     RepaymentTotalPaidResponse totalPaidAmount(Integer applicationId);
     TotalAmountResponse totalAmountOutstanding(Integer applicationId);
+    RepaymentHistoryResponse repaymentHistory(Integer applicationId);
 }

@@ -1,9 +1,6 @@
 package com.bank.loan_management.controller;
 
-import com.bank.loan_management.dto.LoanRepaymentResponse;
-import com.bank.loan_management.dto.RepaymentScheduleResponse;
-import com.bank.loan_management.dto.RepaymentTotalPaidResponse;
-import com.bank.loan_management.dto.TotalAmountResponse;
+import com.bank.loan_management.dto.*;
 import com.bank.loan_management.service.LoanRepaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +54,11 @@ public class LoanRepaymentController {
     public ResponseEntity<TotalAmountResponse> totalAmountOutstanding(@PathVariable("applicationId") Integer applicationId){
         TotalAmountResponse totalAmountResponse = loanRepaymentService.totalAmountOutstanding(applicationId);
         return ResponseEntity.ok(totalAmountResponse);
+    }
+
+    @GetMapping("{applicationId}/history")
+    public ResponseEntity<RepaymentHistoryResponse> repaymentHistory(@PathVariable("applicationId") Integer applicationId){
+        RepaymentHistoryResponse repaymentHistoryResponse = loanRepaymentService.repaymentHistory(applicationId);
+        return ResponseEntity.ok(repaymentHistoryResponse);
     }
 }
